@@ -1,3 +1,8 @@
+// MIT License
+// Copyright (c) 2016 maujaburPFont fonte; 
+// 2016/12/21
+// Processing 3.2.3
+
 // breaks the text into words
 String[] breakTxt (String txt) {
   return txt.split("\\s++"); // breaks on spaces, one or more

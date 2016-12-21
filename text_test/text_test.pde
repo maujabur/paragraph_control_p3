@@ -1,9 +1,14 @@
-PFont fonte;  //<>//
+// MIT License //<>//
+// Copyright (c) 2016 maujaburPFont fonte; 
+// 2016/12/21
+// Processing 3.2.3
+
 boolean debug = false;
 float fontSize = 16; // ajustado palo mouse , botão esquerdo
 float limit_w = 286; // ajustado pelo mouse, botão direito
 float fontLeading; // espaçamento entre bases das linhas ( rel. tamanho da fonte) 
 float largura_blank; // espaçamento entre palavras em pixels
+PFont fonte;
 
 void setup() {
   size (800, 800); // tamanho inicial da janela
