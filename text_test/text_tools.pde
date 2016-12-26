@@ -80,11 +80,16 @@ float drawText (String[] words, int beginIndex, int endIndex, float blank_w, flo
   return w;
 }
 
-// draws a paragraph givn the list of words and the list of breaks
+int drawTextByW (String[] words, int beginIndex, float txt_w, float blank_w, float x, float y, boolean debug) {
+  int endIndex = getIindex(words, beginIndex, txt_w, blank_w);
+  drawText (words, beginIndex, endIndex, blank_w, x, y, debug);
+  return endIndex;
+}
+
+// draws a paragraph given the list of words and the list of breaks
 // returns the y coordinate of the last line rendered
 float drawParagraph(String[] words, IntList breaks, float blank_w, float yStep, float x, float y, boolean debug) {
   for (int i = 1; i< breaks.size(); i++) {
-    y += yStep;
     float w = drawText (words, breaks.get(i-1), breaks.get(i), blank_w, x, y, debug);
     if (debug) {
       pushStyle();
@@ -95,10 +100,44 @@ float drawParagraph(String[] words, IntList breaks, float blank_w, float yStep, 
       text (" ["+ breaks.get(i)+ "]", x+w+textWidth(debugTXT), y);
       popStyle();
     }
+    y += yStep;
   }
   return y;
 }
 
-// IDEA:
-// make a function that gets the first index and de width, 
-// draws the text and returns the break index for the next line
+float drawParagraphByW(String txt, float txt_w, float blank_w, float yStep, float x, float y, boolean debug) {
+  String[] words = breakTxt(txt);
+  IntList breaks = getBreaks(words, txt_w, blank_w);
+  return drawParagraph(words, breaks, blank_w, yStep, x, y, debug);
+}
+
+float txtOffset() {
+  return textAscent()-textDescent();
+}
+
+float txtHeight(int qtLines, float yStep) {
+  return  (qtLines-1)*yStep+textAscent();
+}
+
+String[] breakParagraphs(String txt) {
+  return txt.split("\n");
+}
+
+int qtLines(String txt, float txt_w, float blank_w) {
+int result = 0;
+  String[] paragraphs = breakParagraphs(txt);
+  for (int i = 0; i< paragraphs.length; i++) {
+    String[] words = breakTxt (paragraphs[i]); 
+    result += getBreaks(words, txt_w, blank_w).size()-1;
+  }
+  return result;
+}
+
+float drawText(String txt, float txt_w, float blank_w, float yStep, float x, float y, boolean debug) {
+  String[] paragraphs = breakParagraphs(txt);
+  for (int i = 0; i< paragraphs.length; i++) {
+    y = drawParagraphByW(paragraphs[i], txt_w, blank_w, yStep, x, y, debug);
+  }
+
+  return y;
+}
